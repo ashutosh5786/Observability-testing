@@ -1,0 +1,92 @@
+# apiVersion: install.istio.io/v1alpha1
+# kind: IstioOperator
+# metadata:
+#   name: istio-control-plane
+#   namespace: istio-system
+# spec:
+#   profile: default
+#   components:
+#     ingressGateways:
+#       - name: istio-ingressgateway
+#         enabled: true
+#     egressGateways:
+#       - name: istio-egressgateway
+#         enabled: true
+#     addonComponents:
+#       kiali:
+#         enabled: true
+#         k8s:
+#           resources:
+#             requests:
+#               cpu: 500m
+#               memory: 1Gi
+#             limits:
+#               cpu: 1000m
+#               memory: 2Gi
+#           env:
+#             - name: GRAFANA_URL
+#               value: "http://kubeprometheus-grafana.monitoring:3000"
+#             - name: PROMETHEUS_URL
+#               value: "http://kubeprometheus-kube-promet-prometheus.monitoring:9090"
+#       jaeger:
+#         enabled: true
+#         k8s:
+#           resources:
+#             requests:
+#               cpu: 100m
+#               memory: 500Mi
+#             limits:
+#               cpu: 500m
+#               memory: 1Gi
+#   meshConfig:
+#     enableTracing: true
+#     defaultConfig:
+#       tracing:
+#         sampling: 100
+#         zipkin:
+#           address: "jaeger-collector.istio-system:9411"
+#   values:
+#     telemetry:
+#       v2:
+#         enabled: true
+#     gateways:
+#       istio-ingressgateway:
+#         type: LoadBalancer
+
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istio-control-plane
+  namespace: istio-system
+spec:
+  profile: default
+  components:
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+    egressGateways:
+      - name: istio-egressgateway
+        enabled: true
+  meshConfig:
+    enableTracing: true
+    defaultConfig:
+      tracing:
+        sampling: 100
+        zipkin:
+          address: "jaeger-collector.istio-system:9411"
+  values:
+    kiali:
+      enabled: true
+      dashboard:
+        grafanaURL: "http://your-grafana-service-name.your-namespace:3000"
+        prometheusURL: "http://your-prometheus-service-name.your-namespace:9090"
+    # tracing:
+    #   enabled: true
+    #   provider: "jaeger"
+    # prometheus:
+    #   enabled: false # Disable built-in Prometheus to use external one
+    # grafana:
+    #   enabled: false # Disable built-in Grafana to use external one
+    gateways:
+      istio-ingressgateway:
+        type: LoadBalancer

@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: golden-signals-app-monitor
+  labels:
+    release: kubeprometheus
+spec:
+  selector:
+    matchLabels:
+      app: golden-signals-app
+  endpoints:
+    - port: metrics-port # Use the port name from the Service
+      path: /metrics
+      interval: 15s
+  namespaceSelector:
+    matchNames:
+      - default

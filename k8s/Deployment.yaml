@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golden-signals-app
+  labels:
+    app: golden-signals-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: golden-signals-app
+  template:
+    metadata:
+      labels:
+        app: golden-signals-app
+    spec:
+      containers:
+        - name: golden-signals-app
+          image: ashutosh5786/golden-signal-app:v1
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+          env:
+            - name: NODE_ENV
+              value: "production"

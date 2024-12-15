@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: golden-signals-service
+  labels:
+    app: golden-signals-app
+spec:
+  ports:
+    - name: metrics-port             # Port name, used in ServiceMonitor
+      port: 3000                     # Exposed port
+      targetPort: 3000               # Port on the container
+  selector:
+    app: golden-signals-app
+  type: ClusterIP
